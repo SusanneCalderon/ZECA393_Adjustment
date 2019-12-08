@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Migrations>
+  <Migration EntityType="U" Name="Update Process Create From Freight 2" ReleaseNo="3.9.3" SeqNo="20002">
+    <Step SeqNo="10" StepType="AD">
+      <PO AD_Table_ID="285" Action="U" Record_ID="1001784" Table="AD_Process_Para">
+        <Data AD_Column_ID="2827" Column="AD_Reference_ID" oldValue="19">18</Data>
+        <Data AD_Column_ID="2828" Column="AD_Reference_Value_ID" isOldNull="true">337</Data>
+        <Data AD_Column_ID="3736" Column="AD_Val_Rule_ID" isOldNull="true">233</Data>
+        <Data AD_Column_ID="56299" Column="ReadOnlyLogic" isOldNull="true">1=1</Data>
+      </PO>
+    </Step>
+  </Migration>
+</Migrations>
