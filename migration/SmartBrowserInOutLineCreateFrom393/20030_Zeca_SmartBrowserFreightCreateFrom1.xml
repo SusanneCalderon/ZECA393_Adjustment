@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Migrations>
-  <Migration EntityType="U" Name="Zeca_SmartBrowserFreightCreateFrom1" ReleaseNo="3.9.3" SeqNo="20050">
+  <Migration EntityType="U" Name="Zeca_SmartBrowserFreightCreateFrom1" ReleaseNo="3.9.3" SeqNo="20030">
     <Step DBType="ALL" Parse="Y" SeqNo="10" StepType="SQL">
       <SQLStatement>-- View: adempiere.SB_InOutCreateFromrv_inout_createfrom_freight
 

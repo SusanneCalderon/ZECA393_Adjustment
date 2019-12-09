@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Migrations>
-  <Migration EntityType="D" Name="Zeca_SmartBrowserFreightCreateFrom3" ReleaseNo="3.9.3" SeqNo="20070">
+  <Migration EntityType="D" Name="Zeca_SmartBrowserFreightCreateFrom3" ReleaseNo="3.9.3" SeqNo="20050">
     <Step SeqNo="10" StepType="AD">
       <PO AD_Table_ID="53230" Action="I" Record_ID="50167" Table="AD_View">
         <Data AD_Column_ID="58068" Column="IsActive">true</Data>

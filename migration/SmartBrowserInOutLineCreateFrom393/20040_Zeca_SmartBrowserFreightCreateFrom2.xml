@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Migrations>
-  <Migration EntityType="D" Name="Zeca_SmartBrowserInoutLineCreateFrom2" ReleaseNo="3.9.3" SeqNo="20060">
+  <Migration EntityType="D" Name="Zeca_SmartBrowserInoutLineCreateFrom2" ReleaseNo="3.9.3" SeqNo="20040">
     <Step SeqNo="10" StepType="AD">
       <PO AD_Table_ID="100" Action="I" Record_ID="54698" Table="AD_Table">
         <Data AD_Column_ID="2900882" Column="IsSynchronized">false</Data>
