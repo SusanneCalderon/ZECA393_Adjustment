@@ -24,7 +24,6 @@ import java.util.Map.Entry;
 import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.MInOut;
 import org.compiere.model.MInOutLine;
-import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MLocator;
 import org.compiere.model.MOrderLine;
 import org.compiere.model.MProduct;
@@ -44,13 +43,7 @@ import org.eevolution.grid.Browser;
  */
 public class SBP_InOutCreateFrom extends SBP_InOutCreateFromAbstract {
 
-	/**	Create From Type of RMA		*/
-	private static final String RMA = "A";
-	/**	Create From Type of Order	*/
 	private static final String ORDER = "O";
-	/**	Create From Type of Invoice	*/
-	private static final String INVOICE = "I";
-	/**	Created						*/
 	private int created = 0;
 	protected List<MOrderLine> m_records = null;
 	protected LinkedHashMap<Integer, LinkedHashMap<String, Object>> m_values = null;
@@ -107,7 +100,6 @@ public class SBP_InOutCreateFrom extends SBP_InOutCreateFromAbstract {
 				else
 					throw new AdempiereException("@M_Locator_ID@ @NotFound@");
 			}
-			MInvoiceLine il = null;
 			//	Precision of Qty UOM
 			int precision = 2;
 			if (m_M_Product_ID != 0) {

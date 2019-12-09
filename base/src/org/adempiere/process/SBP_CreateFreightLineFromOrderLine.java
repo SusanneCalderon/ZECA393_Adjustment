@@ -76,7 +76,7 @@ public class SBP_CreateFreightLineFromOrderLine extends SvrProcess
 	MDDFreight freight = null;
 	/** The Query sql			*/
 	private String 		m_sql = null;
-	private String alias = "OLINE";
+	private String alias = "L";
 
 
 	protected List<MOrderLine> m_records = null;
@@ -206,7 +206,7 @@ public class SBP_CreateFreightLineFromOrderLine extends SvrProcess
 		for (Entry<String, Object> entry : values.entrySet()) {
 			String columnName = entry.getKey();
 			
-				if (columnName.equals(alias + "_QtyToDeliver"))
+				if (columnName.equals("L_MovementQty"))
 				{
 					BigDecimal qtyTodeliver = (BigDecimal)entry.getValue();
 					if (qtyTodeliver.compareTo(toDeliver) <0)

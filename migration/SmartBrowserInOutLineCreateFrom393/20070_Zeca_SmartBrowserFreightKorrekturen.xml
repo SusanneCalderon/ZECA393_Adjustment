@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Migrations>
+  <Migration EntityType="D" Name="Zeca_SmartBrowserFreightCreateFrom100" ReleaseNo="3.9.3" SeqNo="20070">
+    <Step SeqNo="10" StepType="AD">
+      <PO AD_Table_ID="285" Action="U" Record_ID="57478" Table="AD_Process_Para">
+        <Data AD_Column_ID="2817" Column="IsActive" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="20" StepType="AD">
+      <PO AD_Table_ID="285" Action="U" Record_ID="57479" Table="AD_Process_Para">
+        <Data AD_Column_ID="2817" Column="IsActive" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="30" StepType="AD">
+      <PO AD_Table_ID="285" Action="U" Record_ID="57480" Table="AD_Process_Para">
+        <Data AD_Column_ID="2817" Column="IsActive" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="40" StepType="AD">
+      <PO AD_Table_ID="101" Action="U" Record_ID="1008388" Table="AD_Column">
+        <Data AD_Column_ID="84306" Column="UUID" isOldNull="true">a2e8e5dd-b619-4538-8395-61d2e45098dc</Data>
+        <Data AD_Column_ID="3369" Column="AD_Process_ID" oldValue="1000443">54335</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="50" StepType="AD">
+      <PO AD_Table_ID="53223" Action="U" Record_ID="66671" Table="AD_Browse_Field">
+        <Data AD_Column_ID="64353" Column="AD_Val_Rule_ID" isOldNull="true">1000121</Data>
+        <Data AD_Column_ID="57970" Column="AD_Reference_ID" oldValue="13">19</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="60" StepType="AD">
+      <PO AD_Table_ID="53231" Action="U" Record_ID="50456" Table="AD_View_Definition">
+        <Data AD_Column_ID="58091" Column="JoinClause" oldValue="INNER JOIN C_Order o on (ol.C_Order_ID=o.c_Order_ID)">INNER JOIN C_Order o on (l.C_Order_ID=o.c_Order_ID)</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="70" StepType="AD">
+      <PO AD_Table_ID="108" Action="I" Record_ID="52748" Table="AD_Val_Rule">
+        <Data AD_Column_ID="583" Column="IsActive">true</Data>
+        <Data AD_Column_ID="192" Column="Type">S</Data>
+        <Data AD_Column_ID="193" Column="Code">C_Order.DocStatus in ('CL','CO') and C_Order.IsSoTrx = 'N'</Data>
+        <Data AD_Column_ID="586" Column="Updated">2019-12-09 00:37:11.783</Data>
+        <Data AD_Column_ID="584" Column="Created">2019-12-09 00:37:11.783</Data>
+        <Data AD_Column_ID="188" Column="Name">C_Order PurchaseOrder Completed and of BPartner</Data>
+        <Data AD_Column_ID="189" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="387" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="388" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="187" Column="AD_Val_Rule_ID">52748</Data>
+        <Data AD_Column_ID="7715" Column="EntityType">U</Data>
+        <Data AD_Column_ID="587" Column="UpdatedBy">100</Data>
+        <Data AD_Column_ID="585" Column="CreatedBy">100</Data>
+        <Data AD_Column_ID="84460" Column="UUID">0aa46c83-383e-42e1-aa33-5d5b051afa0a</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="80" StepType="AD">
+      <PO AD_Table_ID="108" Action="U" Record_ID="52748" Table="AD_Val_Rule">
+        <Data AD_Column_ID="193" Column="Code" oldValue="C_Order.DocStatus in ('CL','CO') and C_Order.IsSoTrx = 'N'">C_Order.DocStatus in ('CL','CO') and C_Order.IsSoTrx = 'N' and C_Order.C_BPartner_ID=@O_C_BPartner_ID@</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="90" StepType="AD">
+      <PO AD_Table_ID="53223" Action="U" Record_ID="66671" Table="AD_Browse_Field">
+        <Data AD_Column_ID="64353" Column="AD_Val_Rule_ID" oldValue="1000121">52748</Data>
+      </PO>
+    </Step>
+    <Step DBType="ALL" Parse="Y" SeqNo="100" StepType="SQL">
+      <SQLStatement>-- View: adempiere.rv_inout_createfrom
+
+-- DROP VIEW adempiere.rv_inout_createfrom;
+
+CREATE OR REPLACE VIEW adempiere.rv_inout_createfrom
+ AS
+ SELECT l.ad_client_id,
+    l.ad_org_id,
+    l.createdby,
+    l.created,
+    l.updatedby,
+    l.updated,
+    l.isactive,
+    l.c_orderline_id AS rv_inout_createfrom_id,
+    l.line,
+        CASE
+            WHEN l.qtyordered = 0::numeric THEN 0::numeric
+            ELSE l.qtyentered / l.qtyordered
+        END * (l.qtyordered - sum(COALESCE(m.qty, 0::numeric))) AS qtyentered,
+    l.c_uom_id,
+    l.qtyordered - sum(COALESCE(m.qty, 0::numeric)) AS movementqty,
+        CASE
+            WHEN l.qtyordered = 0::numeric THEN 0::numeric
+            ELSE l.qtyentered / l.qtyordered
+        END AS multiplier,
+    p.m_locator_id,
+    COALESCE(p.name, c.name) AS name,
+    l.m_product_id,
+    l.m_attributesetinstance_id,
+    l.c_charge_id,
+    l.description,
+    po.vendorproductno,
+    o.c_order_id,
+    0 AS c_invoice_id,
+    0 AS m_rma_id,
+    o.dateordered AS datedoc,
+    o.c_bpartner_id,
+    o.docstatus,
+    'O'::text AS createfromtype,
+    l.c_activity_id,
+    l.c_project_id,
+    l.c_campaign_id,
+    l.user1_id,
+    l.user2_id, l.C_OrderLine_ID
+   FROM adempiere.c_order o
+     JOIN adempiere.c_orderline l ON l.c_order_id = o.c_order_id
+     LEFT JOIN adempiere.m_product_po po ON l.m_product_id = po.m_product_id AND l.c_bpartner_id = po.c_bpartner_id
+     LEFT JOIN adempiere.m_matchpo m ON l.c_orderline_id = m.c_orderline_id AND m.m_inoutline_id IS NOT NULL
+     LEFT JOIN adempiere.m_product p ON l.m_product_id = p.m_product_id
+     LEFT JOIN adempiere.c_charge c ON l.c_charge_id = c.c_charge_id
+  WHERE l.qtyordered &lt;&gt; 0::numeric
+  GROUP BY l.ad_client_id, l.ad_org_id, l.createdby, l.created, l.updatedby, l.updated, l.isactive, l.c_orderline_id, l.line, l.qtyordered, l.qtyentered, l.c_uom_id, p.m_locator_id, p.name, c.name, l.m_product_id, l.m_attributesetinstance_id, l.c_charge_id, l.description, po.vendorproductno, o.c_order_id, o.dateordered, o.c_bpartner_id, o.docstatus, l.c_activity_id, l.c_project_id, l.c_campaign_id, l.user1_id, l.user2_id
+ HAVING (l.qtyordered - sum(COALESCE(m.qty, 0::numeric))) &lt;&gt; 0::numeric
+UNION ALL
+ SELECT l.ad_client_id,
+    l.ad_org_id,
+    l.createdby,
+    l.created,
+    l.updatedby,
+    l.updated,
+    l.isactive,
+    l.c_invoiceline_id AS rv_inout_createfrom_id,
+    l.line,
+        CASE
+            WHEN l.qtyinvoiced = 0::numeric THEN 0::numeric
+            ELSE l.qtyentered / l.qtyinvoiced
+        END * (l.qtyinvoiced - sum(COALESCE(m.qty, 0::numeric))) AS qtyentered,
+    l.c_uom_id,
+    l.qtyinvoiced - sum(COALESCE(m.qty, 0::numeric)) AS movementqty,
+        CASE
+            WHEN l.qtyinvoiced = 0::numeric THEN 0::numeric
+            ELSE l.qtyentered / l.qtyinvoiced
+        END AS multiplier,
+    p.m_locator_id,
+    COALESCE(p.name, c.name) AS name,
+    l.m_product_id,
+    l.m_attributesetinstance_id,
+    l.c_charge_id,
+    l.description,
+    po.vendorproductno,
+    inv.c_order_id,
+    inv.c_invoice_id,
+    0 AS m_rma_id,
+    inv.dateinvoiced AS datedoc,
+    inv.c_bpartner_id,
+    inv.docstatus,
+    'I'::text AS createfromtype,
+    l.c_activity_id,
+    l.c_project_id,
+    l.c_campaign_id,
+    l.user1_id,
+    l.user2_id, null
+   FROM adempiere.c_invoice inv
+     JOIN adempiere.c_invoiceline l ON l.c_invoice_id = inv.c_invoice_id
+     LEFT JOIN adempiere.m_product p ON l.m_product_id = p.m_product_id
+     LEFT JOIN adempiere.c_charge c ON l.c_charge_id = c.c_charge_id
+     LEFT JOIN adempiere.m_product_po po ON l.m_product_id = po.m_product_id AND inv.c_bpartner_id = po.c_bpartner_id
+     LEFT JOIN adempiere.m_matchinv m ON l.c_invoiceline_id = m.c_invoiceline_id AND l.qtyinvoiced &lt;&gt; 0::numeric
+  GROUP BY l.ad_client_id, l.ad_org_id, l.createdby, l.created, l.updatedby, l.updated, l.isactive, l.c_invoiceline_id, l.line, l.qtyinvoiced, l.qtyentered, l.c_uom_id, p.m_locator_id, p.name, c.name, l.m_product_id, l.m_attributesetinstance_id, l.c_charge_id, l.description, po.vendorproductno, inv.c_order_id, inv.c_invoice_id, inv.dateinvoiced, inv.c_bpartner_id, inv.docstatus, l.c_activity_id, l.c_project_id, l.c_campaign_id, l.user1_id, l.user2_id
+ HAVING (l.qtyinvoiced - sum(COALESCE(m.qty, 0::numeric))) &lt;&gt; 0::numeric
+UNION ALL
+ SELECT l.ad_client_id,
+    l.ad_org_id,
+    l.createdby,
+    l.created,
+    l.updatedby,
+    l.updated,
+    l.isactive,
+    l.m_rmaline_id AS rv_inout_createfrom_id,
+    l.line,
+    l.qty - COALESCE(iolp.movementqty, 0::numeric) AS qtyentered,
+    COALESCE(iol.c_uom_id, 100::numeric) AS c_uom_id,
+    l.qty - COALESCE(iolp.movementqty, 0::numeric) AS movementqty,
+    1 AS multiplier,
+    p.m_locator_id,
+    COALESCE(p.name, c.name) AS name,
+    iol.m_product_id,
+    iol.m_attributesetinstance_id,
+    NULL::numeric AS c_charge_id,
+    l.description,
+    NULL::character varying AS vendorproductno,
+    NULL::numeric AS c_order_id,
+    NULL::numeric AS c_invoice_id,
+    r.m_rma_id,
+    r.created AS datedoc,
+    io.c_bpartner_id,
+    r.docstatus,
+    'A'::text AS createfromtype,
+    0 AS c_activity_id,
+    0 AS c_project_id,
+    0 AS c_campaign_id,
+    0 AS user1_id,
+    0 AS user2_id, null
+   FROM adempiere.m_rma r
+     JOIN adempiere.m_rmaline l ON l.m_rma_id = r.m_rma_id
+     JOIN adempiere.m_inout io ON io.m_inout_id = r.inout_id
+     LEFT JOIN adempiere.m_inoutline iol ON iol.m_inoutline_id = l.m_inoutline_id
+     LEFT JOIN ( SELECT iolr.m_rmaline_id,
+            sum(iolr.movementqty) AS movementqty
+           FROM adempiere.m_inout ior
+             JOIN adempiere.m_inoutline iolr ON iolr.m_inout_id = ior.m_inout_id
+          WHERE ior.docstatus = ANY (ARRAY['CO'::bpchar, 'CL'::bpchar])
+          GROUP BY iolr.m_rmaline_id) iolp ON iolp.m_rmaline_id = l.m_rmaline_id
+     LEFT JOIN adempiere.m_product p ON p.m_product_id = iol.m_product_id
+     LEFT JOIN adempiere.c_charge c ON l.c_charge_id = c.c_charge_id
+  WHERE l.qty &lt;&gt; 0::numeric AND (l.m_inoutline_id IS NOT NULL OR l.c_charge_id IS NOT NULL);
+
+ALTER TABLE adempiere.rv_inout_createfrom
+    OWNER TO adempiere;
+
+</SQLStatement>
+    </Step>
+  </Migration>
+</Migrations>
